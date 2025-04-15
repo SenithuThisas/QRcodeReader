@@ -4,5 +4,5 @@ plugins {
     alias(libs.plugins.kotlin.android) apply false
     alias(libs.plugins.kotlin.compose) apply false
     // Add kapt plugin like this:
-    alias(libs.plugins.kotlin.kapt) apply false
+    id("org.jetbrains.kotlin.kapt") version "1.9.23" apply false
 }
