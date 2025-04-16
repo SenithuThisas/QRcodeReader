@@ -40,10 +40,11 @@ fun QrCodeReaderApp() {
             }
         },
         floatingActionButton = {
-            if (navController.currentDestination?.route == "scanner") {
+            val currentRoute = navController.currentBackStackEntryAsState().value?.destination?.route
+            if (currentRoute == "scanner") {
                 ExtendedFloatingActionButton(
                     onClick = { /* Handle scan action */ },
-                    icon = { Icon(Icons.Default.QrCodeScanner, "Scan") },
+                    icon = { Icon(Icons.Default.QrCodeScanner, contentDescription = "Scan") },
                     text = { Text("Scan QR Code") },
                     modifier = Modifier.padding(bottom = 56.dp)
                 )
@@ -64,10 +65,8 @@ fun QrCodeReaderApp() {
                         lastResult = result
                         showResultDialog = true
 
-                        // Save to history
                         scope.launch {
                             if (result.isValidUrl()) {
-                                // Try to fetch preview
                                 val preview = fetchUrlPreview(result)
                                 db.scanHistoryDao().insert(
                                     ScanHistoryItem(
@@ -84,7 +83,7 @@ fun QrCodeReaderApp() {
                         }
                     },
                     onError = { error ->
-                        // Show error
+                        // Show error message if needed
                     }
                 )
 
@@ -98,7 +97,6 @@ fun QrCodeReaderApp() {
                         },
                         onCopy = { text ->
                             context.copyToClipboard(text)
-                            // Show toast
                         },
                         onShare = { text ->
                             context.shareText(text)
@@ -109,7 +107,6 @@ fun QrCodeReaderApp() {
                                     ScanHistoryItem(content = text)
                                 )
                             }
-                            // Show toast
                         }
                     )
                 }
@@ -137,29 +134,29 @@ fun QrCodeReaderApp() {
             composable("generator") {
                 QrGeneratorScreen(
                     onGenerate = { bitmap ->
-                        // Save to gallery or database
+                        // Handle generation logic
                     }
                 )
             }
 
             composable(
                 route = "details/{id}",
-                arguments = listOf(navArgument("id") { type = NavType.IntType }
-                ) { backStackEntry ->
-                    val id = backStackEntry.arguments?.getInt("id") ?: return@composable
-                    val item = historyItems.firstOrNull { it.id == id } ?: return@composable
+                arguments = listOf(navArgument("id") { type = NavType.IntType })
+            ) { backStackEntry ->
+                val id = backStackEntry.arguments?.getInt("id") ?: return@composable
+                val item = historyItems.firstOrNull { it.id == id } ?: return@composable
 
-                    ScanDetailScreen(
-                        item = item,
-                        onBack = { navController.popBackStack() },
-                        onDelete = {
-                            scope.launch {
-                                db.scanHistoryDao().delete(item)
-                                navController.popBackStack()
-                            }
+                ScanDetailScreen(
+                    item = item,
+                    onBack = { navController.popBackStack() },
+                    onDelete = {
+                        scope.launch {
+                            db.scanHistoryDao().delete(item)
+                            navController.popBackStack()
                         }
-                    )
-                }
+                    }
+                )
+            }
         }
     }
 }
