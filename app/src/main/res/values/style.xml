@@ -1,0 +1,17 @@
+<resources>
+    <!-- Base application theme -->
+    <style name="Theme.QrCodeReader" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Customize your theme here -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryVariant">@color/colorPrimaryVariant</item>
+        <item name="colorOnPrimary">@color/colorOnPrimary</item>
+        <item name="colorSecondary">@color/colorSecondary</item>
+        <item name="colorOnSecondary">@color/colorOnSecondary</item>
+
+        <!-- Optional: Define other theme attributes like fonts, shapes, etc. -->
+        <item name="android:windowBackground">@color/windowBackground</item>
+        <item name="android:textColorPrimary">@color/colorOnPrimary</item> <!-- Text color for primary text -->
+        <item name="android:textColorSecondary">@color/colorOnSecondary</item> <!-- Text color for secondary text -->
+        <item name="android:buttonStyle">@style/Widget.MaterialComponents.Button</item> <!-- Button style -->
+    </style>
+</resources>
